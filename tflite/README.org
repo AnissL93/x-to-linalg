@@ -13,7 +13,7 @@ Tensorflow provides tools for convert tflite file to tf dialect, and then to tos
 #+end_src
 * tosa dialect -> linalg dialect
  #+begin_src bash
-./bazel-bin/tensorflow/compiler/mlir/tf-opt -pass-pipeline="builtin.module(func.func(tosa-strip-quant-types,tosa-make-broadcastable,tosa-to-tensor,tosa-to-linalg-named,tosa-to-linalg,tosa-to-arith{include-apply-rescale=1}))" 1-tosa.mlir > 1-linalg.mlir
+./bazel-bin/tensorflow/compiler/mlir/tf-opt -pass-pipeline="builtin.module(func.func(tosa-strip-quant-types,tosa-make-broadcastable,tosa-to-tensor,tosa-to-linalg-named,tosa-to-linalg,tosa-to-arith{include-apply-rescale=1}),cse,canonicalize)" 1-tosa.mlir > 1-linalg.mlir
  #+end_src
 
  - tosa-strip-quant-types: might needed if the ir include quantization info
