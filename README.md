@@ -4,7 +4,7 @@ Collect scripts and code for converting AI models in various formats to linalg+a
 Supported X
 - [ ] pytorch
 - [ ] tensorflow
-- [-] tflite
+- [X] tflite
 - [ ] mhlo
 - [ ] relay
 
