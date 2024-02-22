@@ -1,0 +1,25 @@
+#+title: Tflite model to linalg
+
+Tensorflow provides tools for convert tflite file to tf dialect, and then to tosa dialect. Test on tensorflow commit: 6e6ca51e99c8d46c401ad11982cbf846c3a4071f
+
+* Compile tensorflow
+* tflite -> tfl dialect
+#+begin_src bash
+./bazel-bin/tensorflow/compiler/mlir/lite/flatbuffer_translate --mlir-elide-elementsattrs-if-larger=0 --tflite-flatbuffer-to-mlir 1.tflite > 1-tfl.mlir
+#+end_src
+* tfl dialect -> tosa dialect
+#+begin_src bash
+ ./bazel-bin/tensorflow/compiler/mlir/tf-opt --tf-tfl-to-tosa-pipeline 1-tfl.mlir > 1-tosa.mlir
+#+end_src
+* tosa dialect -> linalg dialect
+ #+begin_src bash
+./bazel-bin/tensorflow/compiler/mlir/tf-opt -pass-pipeline="builtin.module(func.func(tosa-strip-quant-types,tosa-make-broadcastable,tosa-to-tensor,tosa-to-linalg-named,tosa-to-linalg,tosa-to-arith{include-apply-rescale=1}))" 1-tosa.mlir > 1-linalg.mlir
+ #+end_src
+
+ - tosa-strip-quant-types: might needed if the ir include quantization info
+
+* Test with MobileBert
+** Download model
+https://www.kaggle.com/models/tensorflow/mobilebert/frameworks/tfLite
+** Results
+See files in this folder
