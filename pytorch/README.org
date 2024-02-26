@@ -1,0 +1,7 @@
+
+Use torch_mlir library can easily convert a torch model to linalg model
+
+* OpenLlama
+#+begin_src bash
+pip install accelerate
+#+end_src
